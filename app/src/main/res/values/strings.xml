@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SplitEasy</string>
+
+    <!-- Acciones comunes -->
+    <string name="action_back">Volver</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_help">Ayuda</string>
+    <string name="action_swap">Intercambiar</string>
+
+    <!-- Inicio -->
+    <string name="home_tagline">Dos aplicaciones a la vez, sin complicaciones.</string>
+    <string name="home_slot_a">Primera mitad</string>
+    <string name="home_slot_b">Segunda mitad</string>
+    <string name="home_choose_app">Elegir aplicación</string>
+    <string name="home_change_app">Cambiar aplicación</string>
+    <string name="home_open_both">Abrir las dos</string>
+    <string name="home_open_both_note">Abriremos las aplicaciones y te guiaremos para ponerlas en pantalla dividida.</string>
+    <string name="home_capability_title">Modo disponible</string>
+    <string name="home_capability_split">Pantalla dividida compatible</string>
+    <string name="home_capability_windowed">Multiventana compatible</string>
+    <string name="home_capability_assisted">Apertura asistida</string>
+    <string name="home_capability_unconfirmed">Multiventana no disponible o no confirmada</string>
+    <string name="home_capability_split_detail">Hemos comprobado que este dispositivo puede mostrar dos aplicaciones a la vez.</string>
+    <string name="home_capability_windowed_detail">Este dispositivo admite ventanas flotantes. Intentaremos colocarlas lado a lado.</string>
+    <string name="home_capability_assisted_detail">Android no permite abrir dos aplicaciones cualesquiera de forma automática. Te guiaremos paso a paso.</string>
+    <string name="home_capability_unconfirmed_detail">No podemos confirmar que este dispositivo admita multiventana. Prueba la guía manual.</string>
+    <string name="home_capability_learn_more">Cómo funciona</string>
+    <string name="home_favorites_title">Parejas guardadas</string>
+    <string name="home_favorites_empty">Guarda una pareja para abrirla con dos toques.</string>
+    <string name="home_save_pair">Guardar pareja</string>
+    <string name="home_pair_saved">Pareja guardada.</string>
+    <string name="home_pair_already_saved">Esa pareja ya está guardada.</string>
+    <string name="home_save_needs_two">Elige las dos aplicaciones para guardarlas.</string>
+    <string name="home_favorite_missing_app">Aplicación no instalada</string>
+    <string name="home_favorite_load">Cargar pareja</string>
+    <string name="home_favorite_pin">Crear acceso directo</string>
+    <string name="home_favorite_delete">Eliminar pareja</string>
+    <string name="home_favorite_loaded">Pareja cargada.</string>
+    <string name="home_favorite_deleted">Pareja eliminada.</string>
+    <string name="home_favorite_pin_requested">Confirma el aviso del sistema para crear el acceso directo.</string>
+    <string name="home_favorite_pin_unsupported">Tu launcher no permite crear accesos directos.</string>
+    <string name="home_favorite_pin_failed">No se pudo pedir el acceso directo.</string>
+    <string name="home_favorite_not_found">Esa pareja ya no existe.</string>
+    <string name="home_choose_both">Elige dos aplicaciones.</string>
+    <string name="home_launch_failed">No se pudo abrir la aplicación.</string>
+    <string name="home_same_app">Elige dos aplicaciones diferentes.</string>
+    <string name="home_privacy_note">No solicita permisos al usuario, ni anuncios, ni conexión. Tus parejas se guardan solo en este dispositivo.</string>
+
+    <!-- Selector de aplicaciones -->
+    <string name="picker_title_a">Elige la primera aplicación</string>
+    <string name="picker_title_b">Elige la segunda aplicación</string>
+    <string name="picker_search">Buscar aplicaciones</string>
+    <string name="picker_search_placeholder">Nombre de la aplicación</string>
+    <string name="picker_clear_search">Borrar la búsqueda</string>
+    <string name="picker_no_results">No se han encontrado aplicaciones.</string>
+    <string name="picker_empty">No hay aplicaciones disponibles.</string>
+    <string name="picker_loading">Cargando aplicaciones…</string>
+    <plurals name="picker_count">
+        <item quantity="one">%1$d aplicación</item>
+        <item quantity="other">%1$d aplicaciones</item>
+    </plurals>
+    <string name="picker_in_other_half">En la otra mitad</string>
+    <string name="picker_same_app">Esa aplicación ya está en la otra mitad.</string>
+    <string name="picker_selected">Seleccionada</string>
+
+    <!-- Pantalla de apertura -->
+    <string name="run_auto_title">Intentar apertura automática</string>
+    <string name="run_auto_body">Colocaremos las dos aplicaciones en ventanas separadas. Algunos dispositivos no lo permiten y puede abrirse solo una.</string>
+    <string name="run_auto_button">Abrir en dos ventanas</string>
+    <string name="run_auto_working">Abriendo las dos aplicaciones…</string>
+    <string name="run_auto_question">¿Se han abierto las dos aplicaciones en ventanas separadas?</string>
+    <string name="run_auto_yes">Sí, las veo</string>
+    <string name="run_auto_no">No, solo se abrió una</string>
+    <string name="run_auto_success">Multiventana confirmado. La próxima vez será más rápido.</string>
+    <string name="run_manual_title">Abrir en pantalla dividida</string>
+    <string name="run_manual_intro">Android no permite que una aplicación normal abra dos aplicaciones cualesquiera en pantalla dividida. Sigue estos pasos; solo hay que hacerlo una vez.</string>
+    <string name="run_manual_prepare">Abrir las dos aplicaciones</string>
+    <string name="run_manual_prepare_note">Se abrirán una detrás de otra y quedarán en Recientes. Si solo se abre una, prueba el botón individual.</string>
+    <string name="run_manual_open_a">Abrir %1$s</string>
+    <string name="run_manual_open_b">Abrir %1$s</string>
+    <string name="run_manual_step2_title">Abre Recientes</string>
+    <string name="run_manual_step2_gestures">Desliza un dedo hacia arriba desde el borde inferior de la pantalla y mantén un poco antes de soltar.</string>
+    <string name="run_manual_step2_buttons">Toca el botón cuadrado de la barra de navegación (el tercero por la derecha).</string>
+    <string name="run_manual_step2_unknown">Desliza hacia arriba y mantén, o toca el botón cuadrado. Lo que uses normalmente para ver las aplicaciones abiertas.</string>
+    <string name="run_manual_step3_title">Activa la pantalla dividida</string>
+    <string name="run_manual_step3_fallback">Si esa aplicación no muestra la opción, prueba con la otra. Algunas aplicaciones no admiten pantalla dividida.</string>
+    <string name="run_manual_step3_generic">Mantén pulsado el icono de %1$s y elige «Pantalla dividida» o el icono de dos rectángulos.</string>
+    <string name="run_manual_step3_samsung">Mantén pulsado el icono de %1$s y elige «Abrir en vista de pantalla dividida».</string>
+    <string name="run_manual_step3_xiaomi">Mantén pulsada la tarjeta de %1$s y toca el icono de dos rectángulos.</string>
+    <string name="run_manual_step3_motorola">Mantén pulsado el icono de %1$s y elige «Pantalla dividida».</string>
+    <string name="run_manual_step3_pixel">Mantén pulsado el icono de %1$s y elige «Pantalla dividida».</string>
+    <string name="run_manual_step4_title">Elige la otra aplicación</string>
+    <string name="run_manual_step4">Selecciona %1$s en la otra mitad. Si aparece la pantalla de inicio o el cajón de aplicaciones, búscala y tócala.</string>
+    <string name="run_manual_done">Ya las tengo abiertas</string>
+    <string name="run_manual_done_snackbar">Compatibilidad de pantalla dividida confirmada en este dispositivo.</string>
+    <string name="run_manual_warning_title">Algunas aplicaciones no lo permiten</string>
+    <string name="run_manual_warning_body">Si una aplicación se abre a pantalla completa o no aparece en la lista, es posible que no admita multiventana. No es un fallo de SplitEasy.</string>
+    <string name="run_manual_try_again">Volver a intentar la apertura automática</string>
+    <string name="run_manual_experimental">Probar el método experimental</string>
+    <string name="run_manual_experimental_note">Método heredado (FLAG_ACTIVITY_LAUNCH_ADJACENT). En Android 12 o posterior normalmente no funciona. Úsalo solo si quieres probarlo.</string>
+    <string name="run_nav_title">¿Cómo navegas por el móvil?</string>
+    <string name="run_nav_gestures">Gestos</string>
+    <string name="run_nav_buttons">Tres botones</string>
+    <string name="run_nav_unknown">No estoy seguro</string>
+    <string name="run_nav_note">Solo se usa para mostrarte los pasos correctos. Puedes cambiarlo cuando quieras.</string>
+    <string name="run_save_pair">Guardar esta pareja</string>
+    <string name="run_pin_shortcut">Crear acceso directo</string>
+    <string name="run_finish">Listo</string>
+    <string name="run_success_title">Pareja abierta</string>
+    <string name="run_success_body">Guarda la pareja o crea un acceso directo para la próxima vez.</string>
+    <string name="run_experimental_dialog_title">Método experimental</string>
+    <string name="run_experimental_dialog_body">Este método usa una opción pública de Android pensada para ventanas adyacentes. En la mayoría de dispositivos Android 12 o posterior no abre dos aplicaciones distintas y puede dejar SplitEasy junto a una sola aplicación. ¿Quieres probarlo?</string>
+    <string name="run_experimental_dialog_confirm">Probar de todos modos</string>
+    <string name="run_experimental_ask">¿Han aparecido %1$s y %2$s, cada una en su ventana?</string>
+    <string name="run_experimental_failed">El método experimental no ha funcionado en este dispositivo.</string>
+
+    <!-- Ayuda -->
+    <string name="help_title">Ayuda</string>
+    <string name="help_intro_title">Pantalla dividida en cuatro pasos</string>
+    <string name="help_intro_body">Android permite ver dos aplicaciones a la vez, pero el sistema decide cómo. Abre Recientes, mantén pulsado el icono de una aplicación y elige la pantalla dividida. Después selecciona la segunda aplicación. SplitEasy te ayuda a recordar la pareja y a llegar hasta aquí.</string>
+    <string name="help_nav_title">Gestos o tres botones</string>
+    <string name="help_nav_body">Con gestos, desliza hacia arriba desde el borde inferior y mantén para abrir Recientes. Con tres botones, toca el botón cuadrado. SplitEasy intenta detectar tu modo, pero puedes cambiarlo en la pantalla de apertura.</string>
+    <string name="help_vendors_title">Instrucciones por fabricante</string>
+    <string name="help_vendors_caveat">Las rutas pueden cambiar según el modelo y la versión. Si no coinciden, usa los pasos generales o el menú de ayuda del propio móvil.</string>
+    <string name="help_vendor_samsung">Samsung (One UI)</string>
+    <string name="help_vendor_xiaomi">Xiaomi, Redmi y POCO (MIUI / HyperOS)</string>
+    <string name="help_vendor_motorola">Motorola (My UX)</string>
+    <string name="help_vendor_pixel">Google Pixel</string>
+    <string name="help_vendor_generic">Otros dispositivos Android</string>
+    <string name="help_vendor_other">Otro fabricante: %1$s</string>
+    <string name="help_vendor_detected">Tu dispositivo</string>
+    <string name="help_vendor_samsung_body">Abre Recientes y toca el icono de la aplicación en su tarjeta. Elige «Abrir en vista de pantalla dividida». En algunos modelos también existe «Pareja de apps» en el panel lateral; es otra ruta, no siempre disponible.</string>
+    <string name="help_vendor_xiaomi_body">Abre Recientes y mantén pulsada la tarjeta de la aplicación. Busca el icono de dos rectángulos (pantalla dividida). En algunas versiones está en la barra superior de Recientes.</string>
+    <string name="help_vendor_motorola_body">Abre Recientes, mantén pulsado el icono de la aplicación y elige «Pantalla dividida». Después escoge la segunda aplicación.</string>
+    <string name="help_vendor_pixel_body">Abre Recientes, mantén pulsado el icono de la aplicación y elige «Pantalla dividida». Después escoge la segunda aplicación.</string>
+    <string name="help_vendor_generic_body">Abre Recientes y mantén pulsado el icono de la aplicación. Si aparece «Pantalla dividida» o un icono de dos rectángulos, úsalo. Si no aparece, el fabricante puede haberlo movido o no admitirlo en ese modelo.</string>
+    <string name="help_why_title">Por qué no siempre es automático</string>
+    <string name="help_why_body">Android reserva a las aplicaciones normales el control de las ventanas. Las interfaces que colocan dos aplicaciones cualesquiera en pantalla dividida son internas del sistema (por ejemplo, setLaunchWindowingMode) y requieren privilegios que una aplicación instalada desde una tienda no tiene. En dispositivos con ventanas flotantes, SplitEasy intenta usar la API pública de límites de ventana. En el resto, te guía para hacerlo con el propio sistema, sin permisos especiales ni trucos frágiles.</string>
+    <string name="help_privacy_title">Privacidad</string>
+    <string name="help_privacy_body">No solicita permisos al usuario, ni anuncios, ni telemetría, ni servidores. SplitEasy solo consulta las aplicaciones que tienen icono en el lanzador y guarda tus parejas en este dispositivo. No puede leer el contenido de otras aplicaciones.</string>
+    <string name="help_about_title">Acerca de SplitEasy</string>
+    <string name="help_about_version">Versión %1$s</string>
+    <string name="help_about_license">Software libre con licencia MIT.</string>
+    <string name="help_about_source">El código fuente completo se incluye con el proyecto. No se envía ningún dato fuera del dispositivo.</string>
+    <string name="help_advanced_title">Opciones avanzadas</string>
+    <string name="help_advanced_reset">Restablecer la detección de compatibilidad</string>
+    <string name="help_advanced_reset_done">Detección de compatibilidad restablecida.</string>
+    <string name="help_advanced_experimental">Activar el método experimental</string>
+    <string name="help_advanced_experimental_body">Añade un botón para probar FLAG_ACTIVITY_LAUNCH_ADJACENT. En Android 12 o posterior normalmente no abre dos aplicaciones distintas. No se recomienda para uso diario.</string>
+    <string name="help_advanced_reset_dialog_title">¿Restablecer la detección?</string>
+    <string name="help_advanced_reset_dialog_body">Se olvidará lo que SplitEasy ha aprendido sobre este dispositivo. No se borran tus parejas guardadas.</string>
+    <string name="help_advanced_reset_dialog_confirm">Restablecer</string>
+
+    <!-- Descripciones accesibles -->
+    <string name="more_actions_cd">Más acciones para %1$s</string>
+    <string name="remove_app_cd">Quitar %1$s</string>
+    <string name="diagram_split_cd">Esquema de una pantalla dividida en dos mitades, A y B</string>
+    <string name="diagram_gestures_cd">Esquema del gesto para abrir Recientes: deslizar hacia arriba y mantener</string>
+    <string name="diagram_buttons_cd">Esquema de los tres botones de navegación, con el botón cuadrado de Recientes resaltado</string>
+</resources>

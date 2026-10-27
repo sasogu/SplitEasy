@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SplitEasy</string>
+
+    <!-- Accions comunes -->
+    <string name="action_back">Torna</string>
+    <string name="action_cancel">Cancel·la</string>
+    <string name="action_help">Ajuda</string>
+    <string name="action_swap">Intercanvia</string>
+
+    <!-- Inici -->
+    <string name="home_tagline">Dos aplicacions alhora, sense complicacions.</string>
+    <string name="home_slot_a">Primera meitat</string>
+    <string name="home_slot_b">Segona meitat</string>
+    <string name="home_choose_app">Tria una aplicació</string>
+    <string name="home_change_app">Canvia d\'aplicació</string>
+    <string name="home_open_both">Obri les dos</string>
+    <string name="home_open_both_note">Obrim les aplicacions i et guiem per a posar-les en pantalla dividida.</string>
+    <string name="home_capability_title">Mode disponible</string>
+    <string name="home_capability_split">Pantalla dividida compatible</string>
+    <string name="home_capability_windowed">Multiventana compatible</string>
+    <string name="home_capability_assisted">Obertura assistida</string>
+    <string name="home_capability_unconfirmed">Multiventana no disponible o no confirmada</string>
+    <string name="home_capability_split_detail">Hem comprovat que este dispositiu pot mostrar dos aplicacions alhora.</string>
+    <string name="home_capability_windowed_detail">Este dispositiu admet finestres flotants. Intentarem col·locar-les costat a costat.</string>
+    <string name="home_capability_assisted_detail">Android no permet obrir dos aplicacions qualssevol de manera automàtica. Et guiarem pas a pas.</string>
+    <string name="home_capability_unconfirmed_detail">No podem confirmar que este dispositiu admeta multiventana. Prova la guia manual.</string>
+    <string name="home_capability_learn_more">Com funciona</string>
+    <string name="home_favorites_title">Parelles guardades</string>
+    <string name="home_favorites_empty">Guarda una parella per a obrir-la amb dos tocs.</string>
+    <string name="home_save_pair">Guarda la parella</string>
+    <string name="home_pair_saved">Parella guardada.</string>
+    <string name="home_pair_already_saved">Eixa parella ja està guardada.</string>
+    <string name="home_save_needs_two">Tria les dos aplicacions per a guardar-les.</string>
+    <string name="home_favorite_missing_app">Aplicació no instal·lada</string>
+    <string name="home_favorite_load">Carrega la parella</string>
+    <string name="home_favorite_pin">Crea un accés directe</string>
+    <string name="home_favorite_delete">Elimina la parella</string>
+    <string name="home_favorite_loaded">Parella carregada.</string>
+    <string name="home_favorite_deleted">Parella eliminada.</string>
+    <string name="home_favorite_pin_requested">Confirma l\'avís del sistema per a crear l\'accés directe.</string>
+    <string name="home_favorite_pin_unsupported">El teu launcher no permet crear accessos directes.</string>
+    <string name="home_favorite_pin_failed">No s\'ha pogut demanar l\'accés directe.</string>
+    <string name="home_favorite_not_found">Eixa parella ja no existix.</string>
+    <string name="home_choose_both">Tria dos aplicacions.</string>
+    <string name="home_launch_failed">No s\'ha pogut obrir l\'aplicació.</string>
+    <string name="home_same_app">Tria dos aplicacions diferents.</string>
+    <string name="home_privacy_note">No sol·licita permisos a l\'usuari, ni anuncis, ni connexió. Les teues parelles es guarden només en este dispositiu.</string>
+
+    <!-- Selector d'aplicacions -->
+    <string name="picker_title_a">Tria la primera aplicació</string>
+    <string name="picker_title_b">Tria la segona aplicació</string>
+    <string name="picker_search">Busca aplicacions</string>
+    <string name="picker_search_placeholder">Nom de l\'aplicació</string>
+    <string name="picker_clear_search">Neteja la busca</string>
+    <string name="picker_no_results">No s\'han trobat aplicacions.</string>
+    <string name="picker_empty">No hi ha aplicacions disponibles.</string>
+    <string name="picker_loading">S\'estan carregant les aplicacions…</string>
+    <plurals name="picker_count">
+        <item quantity="one">%1$d aplicació</item>
+        <item quantity="other">%1$d aplicacions</item>
+    </plurals>
+    <string name="picker_in_other_half">A l\'altra meitat</string>
+    <string name="picker_same_app">Eixa aplicació ja està a l\'altra meitat.</string>
+    <string name="picker_selected">Seleccionada</string>
+
+    <!-- Pantalla d'obertura -->
+    <string name="run_auto_title">Intenta l\'obertura automàtica</string>
+    <string name="run_auto_body">Col·locarem les dos aplicacions en finestres separades. Alguns dispositius no ho permeten i pot obrir-se només una.</string>
+    <string name="run_auto_button">Obri en dos finestres</string>
+    <string name="run_auto_working">S\'estan obrint les dos aplicacions…</string>
+    <string name="run_auto_question">S\'han obert les dos aplicacions en finestres separades?</string>
+    <string name="run_auto_yes">Sí, les veig</string>
+    <string name="run_auto_no">No, només se n\'ha obert una</string>
+    <string name="run_auto_success">Multiventana confirmat. La pròxima vegada serà més ràpid.</string>
+    <string name="run_manual_title">Obri en pantalla dividida</string>
+    <string name="run_manual_intro">Android no permet que una aplicació normal obri dos aplicacions qualssevol en pantalla dividida. Seguix estos passos; només cal fer-ho una vegada.</string>
+    <string name="run_manual_prepare">Obri les dos aplicacions</string>
+    <string name="run_manual_prepare_note">S\'obriran una darrere l\'altra i quedaran en Recents. Si només s\'obri una, prova el botó individual.</string>
+    <string name="run_manual_open_a">Obri %1$s</string>
+    <string name="run_manual_open_b">Obri %1$s</string>
+    <string name="run_manual_step2_title">Obri Recents</string>
+    <string name="run_manual_step2_gestures">Llisca un dit cap amunt des de la vora inferior de la pantalla i mantín un poc abans de deixar-lo anar.</string>
+    <string name="run_manual_step2_buttons">Toca el botó quadrat de la barra de navegació (el tercer per la dreta).</string>
+    <string name="run_manual_step2_unknown">Llisca cap amunt i mantín, o toca el botó quadrat. El que uses normalment per a vore les aplicacions obertes.</string>
+    <string name="run_manual_step3_title">Activa la pantalla dividida</string>
+    <string name="run_manual_step3_generic">Mantín premut l\'icona de %1$s i tria «Pantalla dividida» o la icona de dos rectangles.</string>
+    <string name="run_manual_step3_samsung">Mantín premut l\'icona de %1$s i tria «Obrir en vista de pantalla dividida».</string>
+    <string name="run_manual_step3_fallback">Si eixa aplicació no mostra l\'opció, prova amb l\'altra. Algunes aplicacions no admeten pantalla dividida.</string>
+    <string name="run_manual_step3_xiaomi">Mantín premuda la targeta de %1$s i toca la icona de dos rectangles.</string>
+    <string name="run_manual_step3_motorola">Mantín premut l\'icona de %1$s i tria «Pantalla dividida».</string>
+    <string name="run_manual_step3_pixel">Mantín premut l\'icona de %1$s i tria «Pantalla dividida».</string>
+    <string name="run_manual_step4_title">Tria l\'altra aplicació</string>
+    <string name="run_manual_step4">Selecciona %1$s a l\'altra meitat. Si apareix la pantalla d\'inici o el calaix d\'aplicacions, busca-la i toca-la.</string>
+    <string name="run_manual_done">Ja les tinc obertes</string>
+    <string name="run_manual_done_snackbar">Compatibilitat de pantalla dividida confirmada en este dispositiu.</string>
+    <string name="run_manual_warning_title">Algunes aplicacions no ho permeten</string>
+    <string name="run_manual_warning_body">Si una aplicació s\'obri a pantalla completa o no apareix en la llista, pot ser que no admeta multiventana. No és un error de SplitEasy.</string>
+    <string name="run_manual_try_again">Torna a intentar l\'obertura automàtica</string>
+    <string name="run_manual_experimental">Prova el mètode experimental</string>
+    <string name="run_manual_experimental_note">Mètode heretat (FLAG_ACTIVITY_LAUNCH_ADJACENT). En Android 12 o posterior normalment no funciona. Usa\'l només si vols provar-lo.</string>
+    <string name="run_nav_title">Com navegues pel mòbil?</string>
+    <string name="run_nav_gestures">Gestos</string>
+    <string name="run_nav_buttons">Tres botons</string>
+    <string name="run_nav_unknown">No n\'estic segur</string>
+    <string name="run_nav_note">Només s\'usa per a mostrar-te els passos correctes. Pots canviar-ho quan vulgues.</string>
+    <string name="run_save_pair">Guarda esta parella</string>
+    <string name="run_pin_shortcut">Crea un accés directe</string>
+    <string name="run_finish">Llest</string>
+    <string name="run_success_title">Parella oberta</string>
+    <string name="run_success_body">Guarda la parella o crea un accés directe per a la pròxima vegada.</string>
+    <string name="run_experimental_dialog_title">Mètode experimental</string>
+    <string name="run_experimental_dialog_body">Este mètode usa una opció pública d\'Android pensada per a finestres adjacents. En la majoria de dispositius Android 12 o posterior no obri dos aplicacions diferents i pot deixar SplitEasy al costat d\'una sola aplicació. Vols provar-lo?</string>
+    <string name="run_experimental_dialog_confirm">Prova-ho de tota manera</string>
+    <string name="run_experimental_ask">Han aparegut %1$s i %2$s, cada una en la seua finestra?</string>
+    <string name="run_experimental_failed">El mètode experimental no ha funcionat en este dispositiu.</string>
+
+    <!-- Ajuda -->
+    <string name="help_title">Ajuda</string>
+    <string name="help_intro_title">Pantalla dividida en quatre passos</string>
+    <string name="help_intro_body">Android permet vore dos aplicacions alhora, però el sistema decidix com. Obri Recents, mantín premut l\'icona d\'una aplicació i tria la pantalla dividida. Després selecciona la segona aplicació. SplitEasy t\'ajuda a recordar la parella i a arribar fins ací.</string>
+    <string name="help_nav_title">Gestos o tres botons</string>
+    <string name="help_nav_body">Amb gestos, llisca cap amunt des de la vora inferior i mantín per a obrir Recents. Amb tres botons, toca el botó quadrat. SplitEasy intenta detectar el teu mode, però pots canviar-lo en la pantalla d\'obertura.</string>
+    <string name="help_vendors_title">Instruccions per fabricant</string>
+    <string name="help_vendors_caveat">Les rutes poden canviar segons el model i la versió. Si no coincidixen, usa els passos generals o el menú d\'ajuda del propi mòbil.</string>
+    <string name="help_vendor_samsung">Samsung (One UI)</string>
+    <string name="help_vendor_xiaomi">Xiaomi, Redmi i POCO (MIUI / HyperOS)</string>
+    <string name="help_vendor_motorola">Motorola (My UX)</string>
+    <string name="help_vendor_pixel">Google Pixel</string>
+    <string name="help_vendor_generic">Altres dispositius Android</string>
+    <string name="help_vendor_other">Un altre fabricant: %1$s</string>
+    <string name="help_vendor_detected">El teu dispositiu</string>
+    <string name="help_vendor_samsung_body">Obri Recents i toca la icona de l\'aplicació en la seua targeta. Tria «Obrir en vista de pantalla dividida». En alguns models també existix «Parella d\'apps» en el panell lateral; és una altra ruta, no sempre disponible.</string>
+    <string name="help_vendor_xiaomi_body">Obri Recents i mantín premuda la targeta de l\'aplicació. Busca la icona de dos rectangles (pantalla dividida). En algunes versions està en la barra superior de Recents.</string>
+    <string name="help_vendor_motorola_body">Obri Recents, mantín premut l\'icona de l\'aplicació i tria «Pantalla dividida». Després tria la segona aplicació.</string>
+    <string name="help_vendor_pixel_body">Obri Recents, mantín premut l\'icona de l\'aplicació i tria «Pantalla dividida». Després tria la segona aplicació.</string>
+    <string name="help_vendor_generic_body">Obri Recents i mantín premut l\'icona de l\'aplicació. Si apareix «Pantalla dividida» o una icona de dos rectangles, usa-ho. Si no apareix, el fabricant pot haver-lo mogut o no admetre-ho en eixe model.</string>
+    <string name="help_why_title">Per què no sempre és automàtic</string>
+    <string name="help_why_body">Android reserva a les aplicacions normals el control de les finestres. Les interfícies que col·loquen dos aplicacions qualssevol en pantalla dividida són internes del sistema (per exemple, setLaunchWindowingMode) i requerixen privilegis que una aplicació instal·lada des d\'una botiga no té. En dispositius amb finestres flotants, SplitEasy intenta usar l\'API pública de límits de finestra. En la resta, et guia per a fer-ho amb el propi sistema, sense permisos especials ni trucs fràgils.</string>
+    <string name="help_privacy_title">Privacitat</string>
+    <string name="help_privacy_body">No sol·licita permisos a l\'usuari, ni anuncis, ni telemetria, ni servidors. SplitEasy només consulta les aplicacions que tenen icona en el launcher i guarda les teues parelles en este dispositiu. No pot llegir el contingut d\'altres aplicacions.</string>
+    <string name="help_about_title">Quant a SplitEasy</string>
+    <string name="help_about_version">Versió %1$s</string>
+    <string name="help_about_license">Programari lliure amb llicència MIT.</string>
+    <string name="help_about_source">El codi font complet s\'inclou amb el projecte. No s\'envia cap dada fora del dispositiu.</string>
+    <string name="help_advanced_title">Opcions avançades</string>
+    <string name="help_advanced_reset">Restablix la detecció de compatibilitat</string>
+    <string name="help_advanced_reset_done">Detecció de compatibilitat restablida.</string>
+    <string name="help_advanced_experimental">Activa el mètode experimental</string>
+    <string name="help_advanced_experimental_body">Afig un botó per a provar FLAG_ACTIVITY_LAUNCH_ADJACENT. En Android 12 o posterior normalment no obri dos aplicacions diferents. No es recomana per a l\'ús diari.</string>
+    <string name="help_advanced_reset_dialog_title">Voleu restablir la detecció?</string>
+    <string name="help_advanced_reset_dialog_body">S\'oblidarà el que SplitEasy ha aprés sobre este dispositiu. No s\'esborren les parelles guardades.</string>
+    <string name="help_advanced_reset_dialog_confirm">Restablix</string>
+
+    <!-- Descripcions accessibles -->
+    <string name="more_actions_cd">Més accions per a %1$s</string>
+    <string name="remove_app_cd">Lleva %1$s</string>
+    <string name="diagram_split_cd">Esquema d\'una pantalla dividida en dos meitats, A i B</string>
+    <string name="diagram_gestures_cd">Esquema del gest per a obrir Recents: lliscar cap amunt i mantindre</string>
+    <string name="diagram_buttons_cd">Esquema dels tres botons de navegació, amb el botó quadrat de Recents ressaltat</string>
+</resources>
