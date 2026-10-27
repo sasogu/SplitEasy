@@ -3,7 +3,6 @@ package es.sasogu.spliteasy.data
 import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.os.Build
 import android.os.Handler
@@ -47,13 +46,18 @@ class SplitLaunchController(private val context: Context) {
     }
 
     fun launchFreeform(first: AppEntry, second: AppEntry): Boolean {
-        if (!packageManager.hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT)) {
-            return false
-        }
-
+        // El ViewModel solo llama aquí si CapabilityEvaluator ha confirmado que
+        // freeform está disponible (función del sistema o ajustes de desarrollo).
         val bounds = freeformHalves() ?: return false
-        val firstIntent = launchIntentFor(first) ?: return false
-        val secondIntent = launchIntentFor(second) ?: return false
+        // MULTIPLE_TASK evita reutilizar una tarea antigua a pantalla completa:
+        // sin esta bandera, Android puede traer la tarea existente e ignorar
+        // los límites de la ventana.
+        val firstIntent = launchIntentFor(first)?.apply {
+            addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+        } ?: return false
+        val secondIntent = launchIntentFor(second)?.apply {
+            addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+        } ?: return false
 
         val firstStarted = runCatching {
             context.startActivity(firstIntent, launchBoundsOptions(bounds.first))
@@ -103,18 +107,60 @@ class SplitLaunchController(private val context: Context) {
         ActivityOptions.makeBasic()
             .setLaunchBounds(bounds.toRect())
             .toBundle()
+            .apply {
+                // ActivityOptions.setLaunchWindowingMode() es @hide, pero su
+                // serialización es estable desde Android 10. La clave del
+                // Bundle fuerza el modo freeform sin reflexión ni permisos.
+                // Se usa solo en el modo de ventanas de SplitEasy.
+                putInt(KEY_LAUNCH_WINDOWING_MODE, WINDOWING_MODE_FREEFORM)
+            }
 
     private fun freeformHalves(): Pair<WindowRect, WindowRect>? {
         val display = displayBounds()
         val density = context.resources.displayMetrics.density
         val marginPx = (SIDE_MARGIN_DP * density).roundToInt()
-        val gapPx = (CENTER_GAP_DP * density).roundToInt()
+        val (statusBarPx, navigationBarPx) = systemBarInsets()
+        // Los límites freeform se interpretan en coordenadas de pantalla y el
+        // sistema desplaza la ventana hacia abajo para dejar sitio a la barra
+        // de estado. Reservamos ese espacio también abajo para que la ventana
+        // no quede cortada en pantallas de coche.
+        val safeDisplay = WindowRect(
+            left = display.left,
+            top = display.top + statusBarPx,
+            right = display.right,
+            bottom = display.bottom - navigationBarPx - statusBarPx,
+        )
+        val sideBySide = display.width >= display.height
+        val gapPx = if (sideBySide) {
+            0
+        } else {
+            (CENTER_GAP_DP * density).roundToInt() + statusBarPx
+        }
         return SplitBoundsCalculator.halves(
-            display = display,
+            display = safeDisplay,
             marginPx = marginPx,
             gapPx = gapPx,
-            sideBySide = display.width >= display.height,
+            sideBySide = sideBySide,
         )
+    }
+
+    private fun systemBarInsets(): Pair<Int, Int> {
+        val windowManager = context.getSystemService(WindowManager::class.java)
+        return runCatching {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                val insets = windowManager.currentWindowMetrics.windowInsets
+                val status = insets.getInsets(android.view.WindowInsets.Type.statusBars()).top
+                val navigation = insets.getInsets(android.view.WindowInsets.Type.navigationBars()).bottom
+                status to navigation
+            } else {
+                val resources = context.resources
+                val statusId = resources.getIdentifier("status_bar_height", "dimen", "android")
+                val navId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+                val status = if (statusId > 0) resources.getDimensionPixelSize(statusId) else 0
+                val navigation = if (navId > 0) resources.getDimensionPixelSize(navId) else 0
+                status to navigation
+            }
+        }.getOrDefault(0 to 0)
     }
 
     private fun displayBounds(): WindowRect {
@@ -141,9 +187,13 @@ class SplitLaunchController(private val context: Context) {
     private fun WindowRect.toRect(): Rect = Rect(left, top, right, bottom)
 
     private companion object {
-        const val FREEFORM_SECOND_LAUNCH_DELAY_MS = 650L
+        const val FREEFORM_SECOND_LAUNCH_DELAY_MS = 0L
         const val ADJACENT_SECOND_LAUNCH_DELAY_MS = 450L
         const val SIDE_MARGIN_DP = 10f
         const val CENTER_GAP_DP = 8f
+
+        // Valores serializados de ActivityOptions / WindowConfiguration.
+        const val KEY_LAUNCH_WINDOWING_MODE = "android.activity.windowingMode"
+        const val WINDOWING_MODE_FREEFORM = 5
     }
 }

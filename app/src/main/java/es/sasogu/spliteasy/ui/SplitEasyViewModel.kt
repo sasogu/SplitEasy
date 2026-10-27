@@ -1,6 +1,8 @@
 package es.sasogu.spliteasy.ui
 
 import android.app.Application
+import android.content.Intent
+import android.provider.Settings
 import androidx.annotation.StringRes
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -65,6 +67,7 @@ data class UiState(
     val runPhase: RunPhase = RunPhase.READY,
     val lastAttemptWasExperimental: Boolean = false,
     val experimentalEnabled: Boolean = false,
+    val carMode: Boolean = false,
 ) {
     val canOpenBoth: Boolean
         get() = slotA != null && slotB != null && slotA.packageName != slotB.packageName
@@ -99,6 +102,7 @@ class SplitEasyViewModel(application: Application) : AndroidViewModel(applicatio
                 capability = CapabilityEvaluator.evaluate(facts, container.capability.evidence()),
                 vendor = VendorDetector.detect(facts.manufacturer, facts.brand),
                 experimentalEnabled = container.capability.evidence().experimentalAdjacentEnabled,
+                carMode = container.capability.carModeEnabled(defaultCarMode(facts)),
             )
         }
         loadApps()
@@ -219,6 +223,10 @@ class SplitEasyViewModel(application: Application) : AndroidViewModel(applicatio
         val current = _state.value
         val first = current.slotA ?: return
         val second = current.slotB ?: return
+        if (!experimental && current.capability?.canAttemptFreeform != true) {
+            message(R.string.car_mode_freeform_not_available)
+            return
+        }
 
         _state.update {
             it.copy(
@@ -368,6 +376,40 @@ class SplitEasyViewModel(application: Application) : AndroidViewModel(applicatio
         pinPair(pair)
     }
 
+    fun setCarMode(enabled: Boolean) {
+        container.capability.setCarModeEnabled(enabled)
+        _state.update { it.copy(carMode = enabled) }
+    }
+
+    fun refreshDeviceFacts() {
+        val current = _state.value
+        val oldFacts = current.facts
+        val facts = container.capability.deviceFacts().copy(
+            navigationBottomInsetDp = oldFacts?.navigationBottomInsetDp ?: 0,
+            navigationLeftInsetDp = oldFacts?.navigationLeftInsetDp ?: 0,
+            navigationRightInsetDp = oldFacts?.navigationRightInsetDp ?: 0,
+        )
+        val evidence = container.capability.evidence()
+        _state.update {
+            it.copy(
+                facts = facts,
+                capability = CapabilityEvaluator.evaluate(facts, evidence),
+                vendor = VendorDetector.detect(facts.manufacturer, facts.brand),
+                experimentalEnabled = evidence.experimentalAdjacentEnabled,
+                carMode = container.capability.carModeEnabled(defaultCarMode(facts)),
+            )
+        }
+        message(R.string.car_mode_checked)
+    }
+
+    fun openDeveloperOptions() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        if (runCatching { getApplication<Application>().startActivity(intent) }.isFailure) {
+            message(R.string.car_dev_options_missing)
+        }
+    }
+
     fun setExperimentalEnabled(enabled: Boolean) {
         container.capability.setExperimentalAdjacentEnabled(enabled)
         _state.update { it.copy(experimentalEnabled = enabled) }
@@ -419,6 +461,10 @@ class SplitEasyViewModel(application: Application) : AndroidViewModel(applicatio
             ShortcutHelper.PinResult.Failed -> message(R.string.home_favorite_pin_failed)
         }
     }
+
+    private fun defaultCarMode(facts: DeviceFacts): Boolean =
+        facts.isLikelyCarBox ||
+            (facts.freeformDeveloperOption && !facts.freeformWindowManagement)
 
     private fun refreshCapability() {
         val facts = _state.value.facts ?: container.capability.deviceFacts()

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -25,6 +26,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -39,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import es.sasogu.spliteasy.R
@@ -55,6 +58,8 @@ import es.sasogu.spliteasy.ui.components.WarningText
 fun RunPairScreen(
     state: UiState,
     onNavigationMode: (NavigationMode) -> Unit,
+    onOpenDeveloperOptions: () -> Unit,
+    onRefreshCapability: () -> Unit,
     onAttemptAutomatic: (Boolean) -> Unit,
     onConfirmAutomaticSuccess: () -> Unit,
     onReportAutomaticFailure: () -> Unit,
@@ -74,6 +79,7 @@ fun RunPairScreen(
 
     val missing = state.pairHasMissingApp
     var experimentalDialogVisible by rememberSaveable { mutableStateOf(false) }
+    var showAdbCommands by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -121,8 +127,19 @@ fun RunPairScreen(
                 RunPhase.READY -> {
                     if (state.capability?.canAttemptFreeform == true && !missing) {
                         AutoAttemptCard(
+                            carMode = state.carMode,
                             onAttempt = { onAttemptAutomatic(false) },
                             onShowManual = onShowManualSteps,
+                        )
+                    } else if (state.carMode) {
+                        CarModeCard(
+                            failed = false,
+                            freeformAvailable = state.capability?.canAttemptFreeform == true,
+                            showAdbCommands = showAdbCommands,
+                            onToggleAdb = { showAdbCommands = !showAdbCommands },
+                            onOpenDeveloperOptions = onOpenDeveloperOptions,
+                            onRefreshCapability = onRefreshCapability,
+                            onRetry = { onAttemptAutomatic(false) },
                         )
                     } else {
                         ManualSection(
@@ -144,22 +161,36 @@ fun RunPairScreen(
                     }
                 }
 
-                RunPhase.MANUAL -> ManualSection(
-                    state = state,
-                    missing = missing,
-                    onNavigationMode = onNavigationMode,
-                    onPrepareLaunch = onPrepareManualLaunch,
-                    onLaunchFirst = onLaunchFirst,
-                    onLaunchSecond = onLaunchSecond,
-                    onDone = onManualSuccess,
-                    onRetryAutomatic = {
-                        if (state.capability?.canAttemptFreeform == true) {
-                            onAttemptAutomatic(false)
-                        }
-                    },
-                    onExperimental = { experimentalDialogVisible = true },
-                    onHelp = onHelp,
-                )
+                RunPhase.MANUAL -> {
+                    if (state.carMode) {
+                        CarModeCard(
+                            failed = true,
+                            freeformAvailable = state.capability?.canAttemptFreeform == true,
+                            showAdbCommands = showAdbCommands,
+                            onToggleAdb = { showAdbCommands = !showAdbCommands },
+                            onOpenDeveloperOptions = onOpenDeveloperOptions,
+                            onRefreshCapability = onRefreshCapability,
+                            onRetry = { onAttemptAutomatic(false) },
+                        )
+                    } else {
+                        ManualSection(
+                            state = state,
+                            missing = missing,
+                            onNavigationMode = onNavigationMode,
+                            onPrepareLaunch = onPrepareManualLaunch,
+                            onLaunchFirst = onLaunchFirst,
+                            onLaunchSecond = onLaunchSecond,
+                            onDone = onManualSuccess,
+                            onRetryAutomatic = {
+                                if (state.capability?.canAttemptFreeform == true) {
+                                    onAttemptAutomatic(false)
+                                }
+                            },
+                            onExperimental = { experimentalDialogVisible = true },
+                            onHelp = onHelp,
+                        )
+                    }
+                }
             }
         }
     }
@@ -349,6 +380,7 @@ private fun SuccessCard(
 
 @Composable
 private fun AutoAttemptCard(
+    carMode: Boolean,
     onAttempt: () -> Unit,
     onShowManual: () -> Unit,
 ) {
@@ -374,6 +406,13 @@ private fun AutoAttemptCard(
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onTertiaryContainer,
             )
+            if (carMode) {
+                Text(
+                    text = stringResource(R.string.car_mode_auto_note),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onTertiaryContainer,
+                )
+            }
             Button(
                 onClick = onAttempt,
                 modifier = Modifier
@@ -392,6 +431,149 @@ private fun AutoAttemptCard(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             ) {
                 Text(stringResource(R.string.run_manual_title))
+            }
+        }
+    }
+}
+
+@Composable
+private fun CarModeCard(
+    failed: Boolean,
+    freeformAvailable: Boolean,
+    showAdbCommands: Boolean,
+    onToggleAdb: () -> Unit,
+    onOpenDeveloperOptions: () -> Unit,
+    onRefreshCapability: () -> Unit,
+    onRetry: () -> Unit,
+) {
+    val containerColor = if (failed) {
+        MaterialTheme.colorScheme.errorContainer
+    } else {
+        MaterialTheme.colorScheme.secondaryContainer
+    }
+    val contentColor = if (failed) {
+        MaterialTheme.colorScheme.onErrorContainer
+    } else {
+        MaterialTheme.colorScheme.onSecondaryContainer
+    }
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(containerColor = containerColor),
+    ) {
+        Column(
+            modifier = Modifier.padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            Text(
+                text = stringResource(
+                    if (failed) R.string.car_mode_failed_title else R.string.car_mode_setup_title,
+                ),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = contentColor,
+            )
+            Text(
+                text = stringResource(
+                    if (failed) R.string.car_mode_failed_body else R.string.car_mode_setup_body,
+                ),
+                style = MaterialTheme.typography.bodyLarge,
+                color = contentColor,
+            )
+            Text(
+                text = stringResource(R.string.car_mode_no_recents),
+                style = MaterialTheme.typography.bodyMedium,
+                color = contentColor,
+            )
+            HorizontalDivider(color = contentColor.copy(alpha = 0.25f))
+            Text(
+                text = stringResource(R.string.car_mode_step_open_dev),
+                style = MaterialTheme.typography.bodyMedium,
+                color = contentColor,
+            )
+            Text(
+                text = stringResource(R.string.car_mode_step_enable),
+                style = MaterialTheme.typography.bodyMedium,
+                color = contentColor,
+            )
+            Text(
+                text = stringResource(R.string.car_mode_step_reboot),
+                style = MaterialTheme.typography.bodyMedium,
+                color = contentColor,
+            )
+            Text(
+                text = stringResource(R.string.car_mode_step_check),
+                style = MaterialTheme.typography.bodyMedium,
+                color = contentColor,
+            )
+            Text(
+                text = stringResource(R.string.car_mode_dev_hint),
+                style = MaterialTheme.typography.bodySmall,
+                color = contentColor,
+            )
+            Button(
+                onClick = onOpenDeveloperOptions,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 54.dp),
+            ) {
+                Text(stringResource(R.string.car_mode_open_dev))
+            }
+            OutlinedButton(
+                onClick = onRefreshCapability,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 54.dp),
+                border = BorderStroke(1.dp, contentColor.copy(alpha = 0.6f)),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = contentColor),
+            ) {
+                Text(stringResource(R.string.car_mode_check))
+            }
+            if (freeformAvailable) {
+                TextButton(
+                    onClick = onRetry,
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                ) {
+                    Text(stringResource(R.string.car_mode_retry))
+                }
+            }
+            Text(
+                text = stringResource(R.string.car_mode_unsupported),
+                style = MaterialTheme.typography.bodySmall,
+                color = contentColor,
+            )
+            TextButton(
+                onClick = onToggleAdb,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            ) {
+                Text(
+                    text = stringResource(
+                        if (showAdbCommands) R.string.car_mode_adb_hide else R.string.car_mode_adb_show,
+                    ),
+                )
+            }
+            if (showAdbCommands) {
+                Text(
+                    text = stringResource(R.string.car_mode_adb_note),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = contentColor,
+                )
+                Surface(
+                    shape = RoundedCornerShape(12.dp),
+                    color = MaterialTheme.colorScheme.surface,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    SelectionContainer {
+                        Text(
+                            text = FREEFORM_ADB_COMMANDS,
+                            style = MaterialTheme.typography.bodySmall,
+                            fontFamily = FontFamily.Monospace,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.padding(12.dp),
+                        )
+                    }
+                }
             }
         }
     }

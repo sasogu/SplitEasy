@@ -115,6 +115,44 @@
     <string name="run_experimental_ask">¿Han aparecido %1$s y %2$s, cada una en su ventana?</string>
     <string name="run_experimental_failed">El método experimental no ha funcionado en este dispositivo.</string>
 
+    <!-- CarPlay / T-Box -->
+    <string name="home_capability_windowed_dev_detail">Ventanas flotantes activadas en Opciones de desarrollador. Si acabas de activarlas, reinicia la caja.</string>
+    <string name="car_mode_title">Modo CarPlay (sin Recientes)</string>
+    <string name="car_mode_body">Pensado para cajas como Carlinkit T-Box: el launcher del coche no tiene Recientes. SplitEasy usará ventanas flotantes si están activadas.</string>
+    <string name="car_mode_setup_title">Activar ventanas flotantes</string>
+    <string name="car_mode_setup_body">Sin Recientes, la única forma de ver dos apps a la vez es usar ventanas flotantes de Android. Se activan una vez desde Opciones de desarrollador y hay que reiniciar.</string>
+    <string name="car_mode_no_recents">El launcher del coche no muestra Recientes, así que los pasos manuales de pantalla dividida no sirven aquí.</string>
+    <string name="car_mode_step_open_dev">1. Abre las opciones de desarrollador.</string>
+    <string name="car_mode_step_enable">2. Activa «Forzar actividades redimensionables» y, si existe, «Habilitar ventanas flotantes».</string>
+    <string name="car_mode_step_reboot">3. Reinicia la caja.</string>
+    <string name="car_mode_step_check">4. Vuelve aquí y pulsa «Comprobar de nuevo».</string>
+    <string name="car_mode_open_dev">Abrir opciones de desarrollador</string>
+    <string name="car_mode_check">Comprobar de nuevo</string>
+    <string name="car_mode_checked">Comprobado.</string>
+    <string name="car_mode_dev_hint">Si no ves Opciones de desarrollador: Ajustes &gt; Acerca de &gt; toca 7 veces «Número de compilación».</string>
+    <string name="car_mode_adb_title">Si no puedes abrir Opciones de desarrollador</string>
+    <string name="car_mode_adb_note">Con la caja conectada al ordenador y la depuración USB activada:</string>
+    <string name="car_mode_adb_show">Ver comandos ADB</string>
+    <string name="car_mode_adb_hide">Ocultar comandos ADB</string>
+    <string name="car_mode_unsupported">Si el firmware bloquea estas opciones, ninguna app instalable puede poner dos aplicaciones lado a lado.</string>
+    <string name="car_mode_failed_title">No se han abierto en ventanas</string>
+    <string name="car_mode_failed_body">Comprueba que las dos opciones siguen activas y que has reiniciado la caja. Algunos firmwares de coche bloquean esta función.</string>
+    <string name="car_mode_retry">Reintentar apertura</string>
+    <string name="car_mode_auto_note">Modo CarPlay: no hace falta Recientes. Si acabas de activar las ventanas flotantes, reinicia la caja antes de probar.</string>
+    <string name="car_mode_freeform_not_available">Activa las ventanas flotantes en Opciones de desarrollador y reinicia la caja.</string>
+    <string name="car_dev_options_missing">Este dispositivo no ofrece Opciones de desarrollador. Usa los comandos ADB.</string>
+    <string name="help_carplay_title">Cajas CarPlay / T-Box</string>
+    <string name="help_carplay_body">Las cajas Carlinkit T-Box y similares muestran Android sobre CarPlay, pero su launcher no suele tener Recientes. Para dos apps a la vez hay que activar las ventanas flotantes de Android: Opciones de desarrollador &gt; «Forzar actividades redimensionables» y «Habilitar ventanas flotantes» &gt; reiniciar. Después, SplitEasy puede colocar las dos aplicaciones. Si el firmware oculta o bloquea esas opciones, no hay una vía pública desde una app; se puede intentar por ADB si el fabricante no las ha deshabilitado.</string>
+    <string name="diag_title">Diagnóstico</string>
+    <string name="diag_android">Android %1$s (API %2$d)</string>
+    <string name="diag_model">Modelo: %1$s</string>
+    <string name="diag_freeform_feature">Ventanas flotantes del sistema: %1$s</string>
+    <string name="diag_freeform_dev">Opción de desarrollador: %1$s</string>
+    <string name="diag_force_resizable">Forzar redimensionables: %1$s</string>
+    <string name="diag_car_mode">Modo CarPlay: %1$s</string>
+    <string name="diag_yes">Sí</string>
+    <string name="diag_no">No</string>
+
     <!-- Ayuda -->
     <string name="help_title">Ayuda</string>
     <string name="help_intro_title">Pantalla dividida en cuatro pasos</string>

@@ -4,6 +4,16 @@ Esta es la parte más importante del proyecto: distinguir lo que Android permite
 realmente de lo que solo funciona en apps del sistema. SplitEasy se ha diseñado
 alrededor de esa frontera.
 
+## Cajas de coche sin Recientes (CarPlay / T-Box)
+
+Cajas como la Carlinkit CPC200-Tbox proyectan Android sobre CarPlay, pero su
+launcher no tiene Recientes. En ellas la guía normal de pantalla dividida no
+sirve. La única vía comprobada es activar las ventanas flotantes de Android en
+Opciones de desarrollador, reiniciar y lanzar dos ventanas con límites. Si el
+firmware oculta o bloquea estas opciones, ninguna app instalable puede sustituir
+al sistema. La app ofrece un modo CarPlay con instrucciones, diagnóstico y
+comandos ADB. Véase [`CARPLAY.md`](CARPLAY.md).
+
 ## 1. Colocar dos aplicaciones arbitrarias en pantalla dividida no es posible con APIs públicas
 
 Android no ofrece a una aplicación normal una API para decir «pon A y B en
@@ -24,10 +34,10 @@ En AOSP (`core/java/android/app/ActivityOptions.java`, rama principal a
 public void setLaunchWindowingMode(int windowingMode) { ... }
 ```
 
-No aparece en la referencia pública de Android. No es invocable desde el SDK,
-no se puede usar con reflexión de forma fiable (restricciones de APIs ocultas)
-y no serviría aunque se invocara: el sistema comprueba privilegios de gestión de
-tareas. SplitEasy **no** lo usa.
+No aparece en la referencia pública de Android. No es invocable desde el SDK y
+la reflexión sobre APIs ocultas no es fiable. SplitEasy **no** invoca el método.
+En el modo experimental de ventanas añade al `Bundle` de `ActivityOptions` la
+clave serializada que ese método escribiría; se explica más abajo.
 
 ### `ActivityOptions.setLaunchBounds()`
 
@@ -40,7 +50,9 @@ Picture-in-Picture:
   política de freeform está disponible.
 
 Por eso SplitEasy usa esta vía únicamente cuando el dispositivo declara
-`FEATURE_FREEFORM_WINDOW_MANAGEMENT`. Incluso entonces:
+`FEATURE_FREEFORM_WINDOW_MANAGEMENT` **o** cuando el usuario ha activado
+`enable_freeform_support` + `force_resizable_activities` en Opciones de
+desarrollador. Incluso entonces:
 
 - El sistema puede ignorar los límites.
 - El fabricante puede recolocar o apilar las ventanas.
@@ -49,6 +61,26 @@ Por eso SplitEasy usa esta vía únicamente cuando el dispositivo declara
   actividad en segundo plano.
 
 La app pide confirmación al usuario en lugar de dar por hecho el resultado.
+
+### La clave serializada de windowing mode (modo experimental)
+
+`ActivityOptions.setLaunchWindowingMode()` es `@hide`, pero su serialización es
+estable desde Android 10:
+
+```text
+android.activity.windowingMode = 5  (WINDOWING_MODE_FREEFORM)
+```
+
+SplitEasy escribe esa clave en el `Bundle` que devuelve
+`ActivityOptions.toBundle()`. No usa reflexión, no pide permisos y no llama al
+método oculto. Aun así **no es una API pública**: es un protocolo interno que el
+fabricante puede ignorar o cambiar. Se usa solo cuando freeform ya está
+disponible por función del sistema o por las opciones de desarrollador, y su
+resultado se confirma con el usuario. Sin esta clave, `setLaunchBounds()` puede
+ser ignorado en Android 13/15 cuando la actividad de origen está a pantalla
+completa; con ella se crea la tarea freeform. Probado en emulador Android 15. Si
+el firmware de la caja no lo admite, la alternativa es ADB/Shizuku o un launcher
+de ventanas del sistema. Probado en emuladores Android 15 y Android 10.
 
 ### `FLAG_ACTIVITY_LAUNCH_ADJACENT`
 
@@ -82,6 +114,9 @@ no puede consultar algo como `FEATURE_SPLIT_SCREEN`. Por eso usa:
 
 - `FEATURE_FREEFORM_WINDOW_MANAGEMENT` para saber si puede intentar ventanas.
 - `ActivityManager.isLowRamDevice` como señal negativa, no como prueba.
+- `Settings.Global.enable_freeform_support` y `force_resizable_activities` como
+  evidencia de que el usuario habilitó ventanas flotantes en Opciones de
+  desarrollador.
 - `onMultiWindowModeChanged` como evidencia real de que la app entró en
   multiventana.
 - La confirmación del usuario tras la guía.
@@ -185,16 +220,17 @@ app se coloca en multiventana.
 
 ## 11. Qué requeriría privilegios del sistema
 
-Para abrir A+B de forma garantizada harían falta, según la versión:
+Para controlar tareas de forma garantizada harían falta, según la versión:
 
 - `MANAGE_ACTIVITY_TASKS` o firma de plataforma para controlar tareas.
-- APIs internas como `setLaunchWindowingMode`, `setLaunchRootTask` o
-  `TaskFragment` organizados por el sistema.
+- APIs internas como `setLaunchRootTask` o `TaskFragment` organizados por el
+  sistema.
 - Posiblemente acceso a `ActivityTaskManager` y permisos de organizador.
 
-Ese camino queda fuera del alcance de una app instalable desde una tienda o un
-APK y no se implementa. SplitEasy prefiere ser pequeña, estable y honesta antes
-que depender de trucos que se rompen con cada versión.
+SplitEasy no pide esos privilegios. La clave serializada de windowing mode no
+requiere permisos en AOSP, pero es un protocolo interno no soportado; por eso el
+modo es experimental y se documenta. Para un control garantizado habría que usar
+ADB/Shizuku o una ROM/launcher con privilegios.
 
 ## 12. Resumen de lo que el usuario debe esperar
 

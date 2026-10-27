@@ -32,8 +32,30 @@ data class DeviceFacts(
     val navigationBottomInsetDp: Int = 0,
     val navigationLeftInsetDp: Int = 0,
     val navigationRightInsetDp: Int = 0,
+    val freeformDeveloperOption: Boolean = false,
+    val forceResizableActivities: Boolean = false,
+    val androidRelease: String = "",
 ) {
     val isTablet: Boolean get() = smallestScreenWidthDp >= 600
+
+    /**
+     * Las cajas de coche suelen ocultar freeform en la capa de fábrica, pero
+     * Android lo habilita si el usuario activa «Enable freeform windows» y
+     * «Force activities to be resizable» en Opciones de desarrollador. El
+     * sistema lo lee al arrancar; por eso hace falta reiniciar.
+     */
+    val freeformAvailable: Boolean
+        get() = freeformWindowManagement ||
+            (freeformDeveloperOption && forceResizableActivities)
+
+    val freeformViaDeveloperOption: Boolean
+        get() = freeformAvailable && !freeformWindowManagement
+
+    val isLikelyCarBox: Boolean
+        get() {
+            val haystack = "$manufacturer $brand $model".lowercase()
+            return "carlinkit" in haystack || "cpc200" in haystack || "tbox" in haystack
+        }
 }
 
 /** Lo que SplitEasy ha aprendido en este dispositivo concreto. */
@@ -60,6 +82,7 @@ data class CapabilityReport(
     val canAttemptFreeform: Boolean,
     val freeformFailures: Int,
     val experimentalAdjacentEnabled: Boolean,
+    val freeformViaDeveloperOption: Boolean = false,
 ) {
     val freeformExhausted: Boolean
         get() = freeformFailures >= CapabilityEvidence.MAX_FREEFORM_FAILURES
@@ -79,8 +102,11 @@ object CapabilityEvaluator {
         facts: DeviceFacts,
         evidence: CapabilityEvidence,
     ): CapabilityReport {
-        val freeformReady = facts.freeformWindowManagement &&
-            !facts.lowRamDevice &&
+        // Si el usuario ha activado freeform explícitamente en Opciones de
+        // desarrollador, respetamos esa decisión aunque el sistema se declare
+        // de poca RAM (las cajas de coche suelen serlo para Android).
+        val freeformReady = facts.freeformAvailable &&
+            (facts.freeformViaDeveloperOption || !facts.lowRamDevice) &&
             evidence.automaticAttemptsAllowed
 
         val level = when {
@@ -95,6 +121,7 @@ object CapabilityEvaluator {
             canAttemptFreeform = freeformReady,
             freeformFailures = evidence.freeformFailures,
             experimentalAdjacentEnabled = evidence.experimentalAdjacentEnabled,
+            freeformViaDeveloperOption = facts.freeformViaDeveloperOption,
         )
     }
 }

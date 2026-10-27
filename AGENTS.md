@@ -27,3 +27,16 @@ El de distribución, en `app/build/outputs/apk/release/app-release.apk`.
 - Actualizar `docs/COMPATIBILITY.md`, `docs/LIMITATIONS.md` y
   `docs/TESTING.md` cuando cambie el comportamiento o se pruebe un dispositivo.
 - Licencia MIT. No cambiar la licencia sin decisión expresa del autor.
+
+## Modo CarPlay / T-Box
+
+- No eliminar el modo CarPlay ni el diagnóstico: son necesarios para cajas sin
+  Recientes.
+- Las ventanas flotantes se habilitan con `enable_freeform_support` y
+  `force_resizable_activities`; requieren reinicio.
+- El lanzamiento freeform usa la clave serializada interna
+  `android.activity.windowingMode=5` de `ActivityOptions` para forzar la tarea
+  freeform. No usa reflexión ni permisos, pero no es API pública: cualquier
+  cambio debe documentarse en `docs/LIMITATIONS.md` y probarse en API 29/35.
+- No lanzar la segunda app con retraso: las dos órdenes deben salir mientras
+  SplitEasy sigue en primer plano.

@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -29,10 +31,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import es.sasogu.spliteasy.BuildConfig
 import es.sasogu.spliteasy.R
+import es.sasogu.spliteasy.domain.CapabilityReport
+import es.sasogu.spliteasy.domain.DeviceFacts
 import es.sasogu.spliteasy.domain.GuideVendor
 import es.sasogu.spliteasy.domain.NavigationMode
 import es.sasogu.spliteasy.ui.components.ExpandableSection
@@ -43,13 +48,20 @@ import es.sasogu.spliteasy.ui.components.WarningText
 @Composable
 fun HelpScreen(
     experimentalEnabled: Boolean,
+    carMode: Boolean,
+    facts: DeviceFacts?,
+    capability: CapabilityReport?,
     manufacturer: String,
     model: String,
     vendor: GuideVendor,
     onExperimentalChange: (Boolean) -> Unit,
+    onCarModeChange: (Boolean) -> Unit,
+    onOpenDeveloperOptions: () -> Unit,
+    onRefreshCapability: () -> Unit,
     onResetCapability: () -> Unit,
 ) {
     var resetDialogVisible by rememberSaveable { mutableStateOf(false) }
+    var showAdbCommands by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -118,6 +130,162 @@ fun HelpScreen(
                     body = stringResource(R.string.help_vendor_generic_body),
                     highlighted = vendor == GuideVendor.GENERIC,
                 )
+            }
+
+            ExpandableSection(title = stringResource(R.string.help_carplay_title)) {
+                Text(
+                    text = stringResource(R.string.help_carplay_body),
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = stringResource(R.string.car_mode_title),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.weight(1f),
+                    )
+                    Switch(
+                        checked = carMode,
+                        onCheckedChange = onCarModeChange,
+                    )
+                }
+                Text(
+                    text = stringResource(R.string.car_mode_body),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+
+                Button(
+                    onClick = onOpenDeveloperOptions,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 50.dp),
+                ) {
+                    Text(stringResource(R.string.car_mode_open_dev))
+                }
+                OutlinedButton(
+                    onClick = onRefreshCapability,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 50.dp),
+                ) {
+                    Text(stringResource(R.string.car_mode_check))
+                }
+                Text(
+                    text = stringResource(R.string.car_mode_dev_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+
+                TextButton(
+                    onClick = { showAdbCommands = !showAdbCommands },
+                    modifier = Modifier.align(Alignment.Start),
+                ) {
+                    Text(
+                        text = stringResource(
+                            if (showAdbCommands) {
+                                R.string.car_mode_adb_hide
+                            } else {
+                                R.string.car_mode_adb_show
+                            },
+                        ),
+                    )
+                }
+                if (showAdbCommands) {
+                    Text(
+                        text = stringResource(R.string.car_mode_adb_note),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = MaterialTheme.colorScheme.surface,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        SelectionContainer {
+                            Text(
+                                text = FREEFORM_ADB_COMMANDS,
+                                style = MaterialTheme.typography.bodySmall,
+                                fontFamily = FontFamily.Monospace,
+                                modifier = Modifier.padding(12.dp),
+                            )
+                        }
+                    }
+                }
+                Text(
+                    text = stringResource(R.string.car_mode_unsupported),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+
+                if (facts != null) {
+                    HorizontalDivider(
+                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f),
+                    )
+                    Text(
+                        text = stringResource(R.string.diag_title),
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                    Text(
+                        text = stringResource(
+                            R.string.diag_android,
+                            facts.androidRelease.ifBlank { facts.sdkInt.toString() },
+                            facts.sdkInt,
+                        ),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                    Text(
+                        text = stringResource(
+                            R.string.diag_model,
+                            listOf(facts.manufacturer, facts.model)
+                                .filter { it.isNotBlank() }
+                                .joinToString(" ")
+                                .ifBlank { "-" },
+                        ),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                    Text(
+                        text = stringResource(
+                            R.string.diag_freeform_feature,
+                            yesNo(facts.freeformWindowManagement),
+                        ),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                    Text(
+                        text = stringResource(
+                            R.string.diag_freeform_dev,
+                            yesNo(facts.freeformDeveloperOption),
+                        ),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                    Text(
+                        text = stringResource(
+                            R.string.diag_force_resizable,
+                            yesNo(facts.forceResizableActivities),
+                        ),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                    Text(
+                        text = stringResource(
+                            R.string.diag_car_mode,
+                            yesNo(carMode),
+                        ),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                    if (capability?.freeformViaDeveloperOption == true) {
+                        Text(
+                            text = stringResource(R.string.home_capability_windowed_dev_detail),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
             }
 
             ExpandableSection(title = stringResource(R.string.help_why_title)) {
@@ -302,6 +470,10 @@ private fun VendorRow(
         }
     }
 }
+
+@Composable
+private fun yesNo(value: Boolean): String =
+    stringResource(if (value) R.string.diag_yes else R.string.diag_no)
 
 @Composable
 private fun genericVendorTitle(manufacturer: String, model: String): String {

@@ -40,7 +40,13 @@ fun CapabilityCard(
 ) {
     val level = report?.level ?: CapabilityLevel.ASSISTED
     val title = stringResource(level.titleResource())
-    val detail = stringResource(level.detailResource())
+    val detail = if (level == CapabilityLevel.WINDOWED &&
+        report?.freeformViaDeveloperOption == true
+    ) {
+        stringResource(R.string.home_capability_windowed_dev_detail)
+    } else {
+        stringResource(level.detailResource())
+    }
     val icon: ImageVector = when (level) {
         CapabilityLevel.SPLIT_CONFIRMED,
         CapabilityLevel.WINDOWED,

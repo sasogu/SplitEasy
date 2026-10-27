@@ -18,6 +18,10 @@ Android 10 o posterior · Sin permisos de usuario · Sin conexión · Licencia M
 | --- | --- | --- |
 | ![Favoritos](docs/screenshots/favorites-es.png) | ![Éxito](docs/screenshots/success-es.png) | ![Valenciano](docs/screenshots/home-va.png) |
 
+| Modo CarPlay | Ventanas flotantes | Ayuda CarPlay |
+| --- | --- | --- |
+| ![Configuración](docs/screenshots/carplay-setup.png) | ![Resultado](docs/screenshots/carplay-windows.png) | ![Ayuda](docs/screenshots/carplay-help.png) |
+
 ## Qué hace y qué no hace
 
 SplitEasy puede:
@@ -26,8 +30,10 @@ SplitEasy puede:
   `QUERY_ALL_PACKAGES`.
 - Elegir una aplicación para cada mitad y guardar la pareja.
 - Crear un acceso directo anclado en la pantalla de inicio.
-- Intentar la apertura en ventanas flotantes cuando el dispositivo declara la
-  función `FEATURE_FREEFORM_WINDOW_MANAGEMENT`.
+- Intentar la apertura en ventanas flotantes cuando el dispositivo declara
+  `FEATURE_FREEFORM_WINDOW_MANAGEMENT` o cuando el usuario activa las ventanas
+  flotantes en Opciones de desarrollador.
+- Modo CarPlay para cajas como Carlinkit T-Box, que no tienen Recientes.
 - Guiar paso a paso cuando la apertura automática no es posible, con
   instrucciones adaptadas a Samsung, Xiaomi/Redmi/POCO, Motorola, Pixel y
   Android genérico.
@@ -36,23 +42,25 @@ SplitEasy puede:
 
 SplitEasy **no** puede, con APIs públicas, colocar dos aplicaciones arbitrarias
 en pantalla dividida. Android reserva ese control al sistema. La aplicación no
-usa APIs ocultas, reflexión, accesibilidad, root ni permisos especiales, y no
-afirma que un dispositivo sea compatible basándose solo en su versión de
-Android. Los detalles técnicos están en
+usa reflexión, accesibilidad, root ni permisos especiales, y no afirma que un
+dispositivo sea compatible basándose solo en su versión de Android. Para el modo
+experimental de ventanas usa también una clave serializada de `ActivityOptions`
+que Android mantiene estable desde Android 10; está documentada en
 [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md).
 
 ## Estado del proyecto
 
-Versión **0.1.0** (primera versión pública). Probada en emuladores Android 10
-(API 29) con el APK de distribución y Android 15 (API 35) con el APK de
-depuración. No se ha probado todavía en teléfonos físicos de cada fabricante ni
-en un dispositivo con ventanas flotantes reales. La matriz y la evidencia están en
-[`docs/COMPATIBILITY.md`](docs/COMPATIBILITY.md) y
-[`docs/TESTING.md`](docs/TESTING.md).
+Versión **0.1.1**. Probada en emuladores Android 10 (API 29) y Android 15
+(API 35) con el APK release, incluidas dos ventanas flotantes reales en ambos.
+No se ha probado todavía en una caja T-Box física ni en teléfonos de cada
+fabricante. La matriz y la evidencia están en
+[`docs/COMPATIBILITY.md`](docs/COMPATIBILITY.md),
+[`docs/TESTING.md`](docs/TESTING.md) y
+[`docs/CARPLAY.md`](docs/CARPLAY.md).
 
 ## Instalación
 
-1. Descarga `SplitEasy-0.1.0.apk` desde
+1. Descarga `SplitEasy-0.1.1.apk` desde
    [Releases](https://github.com/sasogu/SplitEasy/releases/latest).
 2. Permite instalar aplicaciones desconocidas para el navegador o el gestor de
    archivos cuando Android lo pregunte.
@@ -61,7 +69,7 @@ en un dispositivo con ventanas flotantes reales. La matriz y la evidencia están
 Alternativamente, con `adb`:
 
 ```bash
-adb install -r SplitEasy-0.1.0.apk
+adb install -r SplitEasy-0.1.1.apk
 ```
 
 El APK de distribución está firmado con una clave propia. El SHA-256 de cada
@@ -113,11 +121,45 @@ avanzadas**.
 - La pantalla de ayuda incluye esquemas de la pantalla dividida, del gesto de
   Recientes y de la navegación con tres botones.
 
+## CarPlay y cajas T-Box
+
+Las cajas Carlinkit T-Box y similares muestran Android sobre CarPlay, pero su
+launcher no tiene Recientes. Para abrir dos aplicaciones a la vez hay que usar
+ventanas flotantes:
+
+1. Activa Opciones de desarrollador: Ajustes → Acerca de → toca 7 veces
+   «Número de compilación».
+2. En Opciones de desarrollador activa **Forzar actividades redimensionables** y
+   **Habilitar ventanas flotantes**.
+3. Reinicia la caja.
+4. Abre SplitEasy → Ayuda → **Cajas CarPlay / T-Box** y comprueba que el
+   diagnóstico muestra la opción de desarrollador y «Forzar redimensionables»
+   en **Sí**. Activa **Modo CarPlay** si no se activó solo.
+5. Elige las dos aplicaciones y pulsa **Abrir las dos** → **Abrir en dos
+   ventanas**.
+
+Si tu firmware no muestra Opciones de desarrollador, la guía de la app incluye
+los comandos ADB:
+
+```bash
+adb shell settings put global enable_freeform_support 1
+adb shell settings put global force_resizable_activities 1
+adb reboot
+```
+
+Estas opciones son una función del sistema Android, no de SplitEasy. Si el
+firmware las bloquea, ninguna aplicación instalable puede forzar dos apps lado a
+lado. En una caja T-Box real esta ruta está pendiente de validación; en el
+emulador Android 15 se han abierto dos ventanas flotantes con límites y sin
+Recientes. Detalles en [`docs/CARPLAY.md`](docs/CARPLAY.md).
+
 ## Privacidad
 
 - No solicita permisos de usuario. No tiene permiso de Internet.
 - No usa anuncios, telemetría, servidores ni cuentas.
-- No usa servicios de accesibilidad, root, shell ni APIs ocultas.
+- No usa servicios de accesibilidad, root ni shell. En el modo de ventanas usa
+  una clave serializada interna de `ActivityOptions` (documentada); no pide
+  permisos especiales.
 - Solo consulta las aplicaciones visibles mediante una firma `<queries>` de
   `MAIN`/`LAUNCHER`. No usa `QUERY_ALL_PACKAGES`.
 - Las parejas se guardan en `SharedPreferences` local. La copia de seguridad de
@@ -178,7 +220,7 @@ firma:
 apksigner verify --print-certs app/build/outputs/apk/release/app-release.apk
 ```
 
-La clave de la versión 0.1.0 está guardada fuera del repositorio en `pass`
+La clave de la versión 0.1.1 está guardada fuera del repositorio en `pass`
 (`spliteasy/android-keystore.jks.b64` y
 `spliteasy/android-keystore-password`). No se debe perder: sin ella no se pueden
 publicar actualizaciones instalables sobre la misma aplicación.
@@ -202,7 +244,7 @@ pruebas unitarias. La interfaz sigue un MVVM sencillo con
 
 ## Pruebas
 
-- 34 pruebas unitarias de JVM: capacidad, límites de ventana, navegación,
+- 38 pruebas unitarias de JVM: capacidad, límites de ventana, navegación,
   fabricantes, búsqueda y persistencia de parejas.
 - Verificación manual en emuladores API 29 y API 35, navegación por gestos y
   tres botones, idiomas, tableta y acceso directo anclado.
@@ -216,8 +258,9 @@ queda pendiente.
   fabricante, con lo comprobado y lo orientativo.
 - [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md): análisis de las APIs públicas,
   APIs ocultas descartadas y límites reales.
+- [`docs/CARPLAY.md`](docs/CARPLAY.md): guía específica para cajas CarPlay/T-Box.
 - [`docs/TESTING.md`](docs/TESTING.md): pruebas automatizadas, manuales y
-  resultados de la versión 0.1.0.
+  resultados de la versión 0.1.1.
 
 ## Dependencias principales
 

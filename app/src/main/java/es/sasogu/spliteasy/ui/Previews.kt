@@ -127,6 +127,8 @@ private fun RunPreview() {
                     runPhase = RunPhase.MANUAL,
                 ),
                 onNavigationMode = {},
+                onOpenDeveloperOptions = {},
+                onRefreshCapability = {},
                 onAttemptAutomatic = {},
                 onConfirmAutomaticSuccess = {},
                 onReportAutomaticFailure = {},

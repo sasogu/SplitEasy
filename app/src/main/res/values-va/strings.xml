@@ -115,6 +115,44 @@
     <string name="run_experimental_ask">Han aparegut %1$s i %2$s, cada una en la seua finestra?</string>
     <string name="run_experimental_failed">El mètode experimental no ha funcionat en este dispositiu.</string>
 
+    <!-- CarPlay / T-Box -->
+    <string name="home_capability_windowed_dev_detail">Finestres flotants activades en Opcions de desenvolupador. Si acabes d\'activar-les, reinicia la caixa.</string>
+    <string name="car_mode_title">Mode CarPlay (sense Recents)</string>
+    <string name="car_mode_body">Pensat per a caixes com Carlinkit T-Box: el launcher del cotxe no té Recents. SplitEasy usarà finestres flotants si estan activades.</string>
+    <string name="car_mode_setup_title">Activa les finestres flotants</string>
+    <string name="car_mode_setup_body">Sense Recents, l\'única manera de vore dos apps alhora és usar finestres flotants d\'Android. S\'activen una vegada des d\'Opcions de desenvolupador i cal reiniciar.</string>
+    <string name="car_mode_no_recents">El launcher del cotxe no mostra Recents, així que els passos manuals de pantalla dividida no servixen ací.</string>
+    <string name="car_mode_step_open_dev">1. Obri les opcions de desenvolupador.</string>
+    <string name="car_mode_step_enable">2. Activa «Forçar activitats redimensionables» i, si existix, «Habilitar finestres flotants».</string>
+    <string name="car_mode_step_reboot">3. Reinicia la caixa.</string>
+    <string name="car_mode_step_check">4. Torna ací i prem «Comprovar de nou».</string>
+    <string name="car_mode_open_dev">Obri les opcions de desenvolupador</string>
+    <string name="car_mode_check">Comprova de nou</string>
+    <string name="car_mode_checked">Comprovat.</string>
+    <string name="car_mode_dev_hint">Si no veus Opcions de desenvolupador: Ajustos &gt; Quant a &gt; toca 7 vegades «Número de compilació».</string>
+    <string name="car_mode_adb_title">Si no pots obrir Opcions de desenvolupador</string>
+    <string name="car_mode_adb_note">Amb la caixa connectada a l\'ordinador i la depuració USB activada:</string>
+    <string name="car_mode_adb_show">Vore comandes ADB</string>
+    <string name="car_mode_adb_hide">Oculta les comandes ADB</string>
+    <string name="car_mode_unsupported">Si el firmware bloqueja estes opcions, cap app instal·lable pot posar dos aplicacions costat a costat.</string>
+    <string name="car_mode_failed_title">No s\'han obert en finestres</string>
+    <string name="car_mode_failed_body">Comprova que les dos opcions continuen activades i que has reiniciat la caixa. Alguns firmwares de cotxe bloquegen esta funció.</string>
+    <string name="car_mode_retry">Reintenta l\'obertura</string>
+    <string name="car_mode_auto_note">Mode CarPlay: no cal Recents. Si acabes d\'activar les finestres flotants, reinicia la caixa abans de provar.</string>
+    <string name="car_mode_freeform_not_available">Activa les finestres flotants en Opcions de desenvolupador i reinicia la caixa.</string>
+    <string name="car_dev_options_missing">Este dispositiu no oferix Opcions de desenvolupador. Usa les comandes ADB.</string>
+    <string name="help_carplay_title">Caixes CarPlay / T-Box</string>
+    <string name="help_carplay_body">Les caixes Carlinkit T-Box i similars mostren Android sobre CarPlay, però el seu launcher no sol tindre Recents. Per a dos apps alhora cal activar les finestres flotants d\'Android: Opcions de desenvolupador &gt; «Forçar activitats redimensionables» i «Habilitar finestres flotants» &gt; reiniciar. Després, SplitEasy pot col·locar les dos aplicacions. Si el firmware amaga o bloqueja estes opcions, no hi ha una via pública des d\'una app; es pot provar per ADB si el fabricant no les ha deshabilitat.</string>
+    <string name="diag_title">Diagnòstic</string>
+    <string name="diag_android">Android %1$s (API %2$d)</string>
+    <string name="diag_model">Model: %1$s</string>
+    <string name="diag_freeform_feature">Finestres flotants del sistema: %1$s</string>
+    <string name="diag_freeform_dev">Opció de desenvolupador: %1$s</string>
+    <string name="diag_force_resizable">Forçar redimensionables: %1$s</string>
+    <string name="diag_car_mode">Mode CarPlay: %1$s</string>
+    <string name="diag_yes">Sí</string>
+    <string name="diag_no">No</string>
+
     <!-- Ajuda -->
     <string name="help_title">Ajuda</string>
     <string name="help_intro_title">Pantalla dividida en quatre passos</string>

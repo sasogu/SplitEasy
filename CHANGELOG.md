@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.1.1 — 2026-10-27
+
+- Modo CarPlay para cajas como Carlinkit T-Box, que no tienen Recientes.
+- Detección de ventanas flotantes activadas desde Opciones de desarrollador
+  (`enable_freeform_support` + `force_resizable_activities`).
+- Asistente específico para activar ventanas flotantes, reiniciar la caja,
+  comprobar el estado y ver/copiar comandos ADB.
+- Diagnóstico de compatibilidad en Ayuda (modelo, API, freeform, modo CarPlay).
+- Lanzamiento freeform con límites de ventana y tarea nueva, necesario cuando
+  el sistema no aplica los límites a una tarea existente.
+- Prueba en emuladores Android 15 (Calendar + Camera) y Android 10
+  (Calendar + Clock): dos aplicaciones en ventanas flotantes colocadas
+  arriba/abajo (vertical) o izquierda/derecha (horizontal).
+- 38 pruebas unitarias.
+
 ## 0.1.0 — 2026-10-27
 
 Primera versión pública.

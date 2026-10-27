@@ -9,6 +9,8 @@ class CapabilityEvaluatorTest {
     private fun facts(
         freeform: Boolean = false,
         lowRam: Boolean = false,
+        freeformDev: Boolean = false,
+        forceResizable: Boolean = false,
     ) = DeviceFacts(
         sdkInt = 35,
         manufacturer = "Test",
@@ -17,6 +19,8 @@ class CapabilityEvaluatorTest {
         freeformWindowManagement = freeform,
         lowRamDevice = lowRam,
         smallestScreenWidthDp = 400,
+        freeformDeveloperOption = freeformDev,
+        forceResizableActivities = forceResizable,
     )
 
     @Test
@@ -71,6 +75,50 @@ class CapabilityEvaluatorTest {
         assertEquals(CapabilityLevel.ASSISTED, report.level)
         assertFalse(report.canAttemptFreeform)
         assertTrue(report.freeformExhausted)
+    }
+
+    @Test
+    fun `developer freeform option enables windowed mode`() {
+        val report = CapabilityEvaluator.evaluate(
+            facts(freeformDev = true, forceResizable = true),
+            CapabilityEvidence(),
+        )
+
+        assertEquals(CapabilityLevel.WINDOWED, report.level)
+        assertTrue(report.canAttemptFreeform)
+        assertTrue(report.freeformViaDeveloperOption)
+    }
+
+    @Test
+    fun `developer freeform option without force resizable is not enough`() {
+        val report = CapabilityEvaluator.evaluate(
+            facts(freeformDev = true, forceResizable = false),
+            CapabilityEvidence(),
+        )
+
+        assertEquals(CapabilityLevel.ASSISTED, report.level)
+        assertFalse(report.canAttemptFreeform)
+    }
+
+    @Test
+    fun `system freeform is not marked as developer option`() {
+        val report = CapabilityEvaluator.evaluate(
+            facts(freeform = true),
+            CapabilityEvidence(),
+        )
+
+        assertFalse(report.freeformViaDeveloperOption)
+    }
+
+    @Test
+    fun `developer freeform overrides low ram heuristic`() {
+        val report = CapabilityEvaluator.evaluate(
+            facts(lowRam = true, freeformDev = true, forceResizable = true),
+            CapabilityEvidence(),
+        )
+
+        assertEquals(CapabilityLevel.WINDOWED, report.level)
+        assertTrue(report.canAttemptFreeform)
     }
 
     @Test

@@ -3,6 +3,7 @@ package es.sasogu.spliteasy.data
 import android.app.ActivityManager
 import android.content.Context
 import android.content.pm.PackageManager
+import android.provider.Settings
 import android.os.Build
 import es.sasogu.spliteasy.domain.CapabilityEvidence
 import es.sasogu.spliteasy.domain.DeviceFacts
@@ -22,6 +23,13 @@ class CapabilityRepository(context: Context) {
     fun deviceFacts(): DeviceFacts {
         val packageManager = appContext.packageManager
         val activityManager = appContext.getSystemService(ActivityManager::class.java)
+        val resolver = appContext.contentResolver
+        val freeformDeveloperOption = runCatching {
+            Settings.Global.getInt(resolver, SETTING_ENABLE_FREEFORM, 0) == 1
+        }.getOrDefault(false)
+        val forceResizableActivities = runCatching {
+            Settings.Global.getInt(resolver, SETTING_FORCE_RESIZABLE, 0) == 1
+        }.getOrDefault(false)
         return DeviceFacts(
             sdkInt = Build.VERSION.SDK_INT,
             manufacturer = Build.MANUFACTURER.orEmpty(),
@@ -32,6 +40,9 @@ class CapabilityRepository(context: Context) {
             ),
             lowRamDevice = activityManager?.isLowRamDevice == true,
             smallestScreenWidthDp = appContext.resources.configuration.smallestScreenWidthDp,
+            freeformDeveloperOption = freeformDeveloperOption,
+            forceResizableActivities = forceResizableActivities,
+            androidRelease = Build.VERSION.RELEASE.orEmpty(),
         )
     }
 
@@ -70,6 +81,17 @@ class CapabilityRepository(context: Context) {
             runCatching { NavigationMode.valueOf(name) }.getOrNull()
         }
 
+    fun carModeEnabled(defaultIfUnset: Boolean): Boolean =
+        if (preferences.contains(KEY_CAR_MODE)) {
+            preferences.getBoolean(KEY_CAR_MODE, defaultIfUnset)
+        } else {
+            defaultIfUnset
+        }
+
+    fun setCarModeEnabled(enabled: Boolean) {
+        preferences.edit().putBoolean(KEY_CAR_MODE, enabled).apply()
+    }
+
     fun setNavigationOverride(mode: NavigationMode?) {
         preferences.edit().apply {
             if (mode == null) remove(KEY_NAVIGATION_OVERRIDE)
@@ -93,5 +115,10 @@ class CapabilityRepository(context: Context) {
         const val KEY_FREEFORM_FAILURES = "freeform_failures"
         const val KEY_EXPERIMENTAL = "experimental_adjacent"
         const val KEY_NAVIGATION_OVERRIDE = "navigation_override"
+        const val KEY_CAR_MODE = "car_mode"
+
+        // Claves públicas de Settings.Global; se leen sin permisos.
+        const val SETTING_ENABLE_FREEFORM = "enable_freeform_support"
+        const val SETTING_FORCE_RESIZABLE = "force_resizable_activities"
     }
 }

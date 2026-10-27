@@ -1,6 +1,6 @@
 # Matriz de compatibilidad
 
-Fecha de la última revisión: 2026-10-27. Versión de SplitEasy: 0.1.0.
+Fecha de la última revisión: 2026-10-27. Versión de SplitEasy: 0.1.1.
 
 ## Cómo leer esta matriz
 
@@ -20,12 +20,12 @@ un dispositivo antiguo con una capa de fabricante.
 
 | Versión | API | Pantalla dividida manual | Apertura automática de A+B | Notas |
 | --- | --- | --- | --- | --- |
-| Android 10 | 29 | Normalmente sí (AOSP; menú verificado A) | No, salvo ventanas flotantes del fabricante | Probado el flujo de guía, la opción «Split screen» en Calendar y su ausencia en Camera (no redimensionable). |
+| Android 10 | 29 | Normalmente sí (AOSP; menú verificado A) | Ventanas flotantes con opciones de desarrollo (probado A) | Probado el flujo de guía y dos ventanas freeform con Calendar+Clock; Camera no era redimensionable. |
 | Android 11 | 30 | Normalmente sí (AOSP) | No, salvo ventanas flotantes | No probado en esta versión. |
 | Android 12 / 12L | 31 / 32 | Normalmente sí (AOSP) | Solo en dispositivos con `FEATURE_FREEFORM_WINDOW_MANAGEMENT` | Android 12L añade mejoras para pantallas grandes; no hay API pública de «app pairs». |
 | Android 13 | 33 | Normalmente sí (AOSP) | Solo ventanas flotantes | Activity Embedding sirve para actividades de la misma app, no para embeber apps ajenas. |
 | Android 14 | 34 | Normalmente sí (AOSP) | Solo ventanas flotantes | Las «parejas de apps» que se ven en algunos dispositivos son funciones del fabricante. |
-| Android 15 | 35 | Normalmente sí (AOSP; interfaz probada A) | Solo ventanas flotantes / escritorio | Probado en emulador: selección, favoritos, guía, idiomas, tableta y accesos directos. |
+| Android 15 | 35 | Normalmente sí (AOSP; interfaz probada A) | Ventanas flotantes / escritorio; también con opciones de desarrollo | Probado en emulador: dos apps en ventanas flotantes, selección, favoritos, idiomas, tableta y accesos directos. |
 | Android 16 | 36 | Normalmente sí (AOSP) | Ventanas flotantes / escritorio en pantallas grandes | No probado. La app usa `targetSdk 35` y se ejecuta en modo de compatibilidad. |
 
 «Normalmente sí» no es una promesa: algunos dispositivos Android Go, con poca
@@ -86,21 +86,33 @@ modo a partir de los insets de la barra de navegación (24-32 dp suele ser gesto
 40 dp o más, tres botones) y permite corregirlo. Esta estimación no afecta a la
 compatibilidad; solo elige el dibujo y el texto del paso 2.
 
-## Resumen de evidencia de la versión 0.1.0
+## Cajas de coche con CarPlay / T-Box
+
+Las cajas Carlinkit T-Box no tienen Recientes en su launcher. La vía que se ha
+verificado en emulador es activar las opciones de desarrollador
+`enable_freeform_support` y `force_resizable_activities`, reiniciar y lanzar dos
+ventanas flotantes. En el emulador Android 15 se abrieron Calendar y Camera en
+dos ventanas, en horizontal y en vertical. Queda pendiente probarlo en una caja
+T-Box física; si el firmware bloquea esas opciones, no hay una vía pública desde
+una app. Instrucciones en [`CARPLAY.md`](CARPLAY.md).
+
+## Resumen de evidencia de la versión 0.1.1
 
 | Elemento | Estado |
 | --- | --- |
-| APK debug en Android 15 (API 35) | Probado |
-| APK release en Android 10 (API 29) | Probado |
+| APK debug y release en Android 15 (API 35) | Probado |
+| APK release 0.1.1 en Android 10 (API 29) y Android 15 (API 35) | Probado |
 | Selección de pareja, favoritos y guía | Probado |
 | Acceso directo anclado y apertura de la pareja | Probado en API 35 |
 | Castellano y valenciano | Probado |
 | Detección de gestos y tres botones | Probado en API 35 |
 | Diseño de tableta (ancho simulado) | Probado |
 | Pantalla dividida real completada de extremo a extremo en emulador | No completada por automatización; se verificó el menú del sistema |
-| Ventanas flotantes automáticas | No probado: el emulador no declara freeform |
+| Ventanas flotantes con opciones de desarrollo | Probado en API 35 (Calendar+Camera) y API 29 (Calendar+Clock) |
+| Caja T-Box física | Pendiente |
 | Teléfonos físicos Samsung, Xiaomi, Motorola, Pixel | Pendiente |
 | Android 12, 13, 14 y 16 | Pendiente |
+| 38 pruebas unitarias | Probado |
 | TalkBack y escala de fuente al 200 % | Pendiente de revisión manual |
 
 Los detalles de las pruebas y el plan pendiente están en

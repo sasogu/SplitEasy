@@ -25,6 +25,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
@@ -107,7 +108,11 @@ fun SplitEasyRoot(viewModel: SplitEasyViewModel) {
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = if (state.carMode && state.route == Route.RUN) {
+            Color.Black
+        } else {
+            MaterialTheme.colorScheme.background
+        },
     ) { innerPadding ->
         Box(
             modifier = Modifier
@@ -141,6 +146,8 @@ fun SplitEasyRoot(viewModel: SplitEasyViewModel) {
                 Route.RUN -> RunPairScreen(
                     state = state,
                     onNavigationMode = viewModel::setNavigationMode,
+                    onOpenDeveloperOptions = viewModel::openDeveloperOptions,
+                    onRefreshCapability = viewModel::refreshDeviceFacts,
                     onAttemptAutomatic = viewModel::attemptAutomatic,
                     onConfirmAutomaticSuccess = viewModel::confirmAutomaticSuccess,
                     onReportAutomaticFailure = viewModel::reportAutomaticFailure,
@@ -157,10 +164,16 @@ fun SplitEasyRoot(viewModel: SplitEasyViewModel) {
 
                 Route.HELP -> HelpScreen(
                     experimentalEnabled = state.experimentalEnabled,
+                    carMode = state.carMode,
+                    facts = state.facts,
+                    capability = state.capability,
                     manufacturer = state.facts?.manufacturer.orEmpty(),
                     model = state.facts?.model.orEmpty(),
                     vendor = state.vendor,
                     onExperimentalChange = viewModel::setExperimentalEnabled,
+                    onCarModeChange = viewModel::setCarMode,
+                    onOpenDeveloperOptions = viewModel::openDeveloperOptions,
+                    onRefreshCapability = viewModel::refreshDeviceFacts,
                     onResetCapability = viewModel::resetCapability,
                 )
             }
